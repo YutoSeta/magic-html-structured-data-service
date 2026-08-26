@@ -22,6 +22,8 @@ final class StructuredDocumentControllerTest extends TestCase
             ->assertOk()->assertJsonPath('version', 1)->assertJsonPath('value.title', 'First');
         $this->withToken('test-token')->putJson('/api/v1/projects/project-one/documents/brief', $this->payload('Second'))
             ->assertOk()->assertJsonPath('version', 2);
+        $this->withToken('test-token')->putJson('/api/v1/projects/project-one/documents/brief', $this->payload('Second'))
+            ->assertOk()->assertJsonPath('version', 2);
         $this->withToken('test-token')->getJson('/api/v1/projects/project-one/documents/brief')
             ->assertOk()->assertJsonPath('value.title', 'Second');
         $this->withToken('test-token')->getJson('/api/v1/projects/project-two/documents/brief')->assertNotFound();

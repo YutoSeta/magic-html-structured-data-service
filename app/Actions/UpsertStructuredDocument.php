@@ -36,6 +36,12 @@ final class UpsertStructuredDocument
                 ]);
             }
 
+            $unchanged = collect(['name', 'kind', 'schema', 'value', 'metadata'])
+                ->every(fn (string $key): bool => $record->{$key} === $attributes[$key]);
+            if ($unchanged) {
+                return $record;
+            }
+
             $record->update([...$attributes, 'version' => $record->version + 1]);
 
             return $record->refresh();

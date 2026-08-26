@@ -4,22 +4,18 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 
-final class UpsertCmsResourceRequest extends ContractRequest
+final class UpsertStructuredDocumentRequest extends ContractRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string,array<mixed>|string>
-     */
+    /** @return array<string,array<mixed>|string> */
     public function rules(): array
     {
         return [
             'contract_version' => ['required', 'in:1.0'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
+            'kind' => ['sometimes', 'string', 'regex:/^[a-z][a-z0-9_-]{0,49}$/'],
             'schema' => ['present', 'array'],
             'value' => ['present'],
-            'media_refs' => ['sometimes', 'array', 'max:1000'],
-            'media_refs.*' => ['required', 'string', 'regex:/^[A-Za-z0-9][A-Za-z0-9_-]{0,99}$/', 'distinct:strict'],
+            'metadata' => ['sometimes', 'array'],
         ];
     }
 
@@ -33,13 +29,14 @@ final class UpsertCmsResourceRequest extends ContractRequest
                 if (! is_object($document?->schema ?? null)) {
                     $validator->errors()->add('schema', 'The schema must be a JSON object.');
                 }
-                $schema = $this->input('schema');
-                $value = $this->input('value');
-                if (is_array($schema) && strlen((string) json_encode($schema)) > 50000) {
+                if (strlen((string) json_encode($this->input('schema'))) > 50000) {
                     $validator->errors()->add('schema', 'The schema may not exceed 50 KB.');
                 }
-                if (strlen((string) json_encode($value)) > 1000000) {
+                if (strlen((string) json_encode($this->input('value'))) > 1000000) {
                     $validator->errors()->add('value', 'The encoded value may not exceed 1 MB.');
+                }
+                if (strlen((string) json_encode($this->input('metadata', []))) > 50000) {
+                    $validator->errors()->add('metadata', 'The metadata may not exceed 50 KB.');
                 }
             },
         ];

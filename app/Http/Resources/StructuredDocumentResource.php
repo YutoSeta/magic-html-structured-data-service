@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-final class CmsResourceResource extends JsonResource
+final class StructuredDocumentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,16 @@ final class CmsResourceResource extends JsonResource
     {
         return [
             'contract_version' => '1.0',
-            'site_id' => $this->site_id,
-            'type' => $this->type,
-            'resource_key' => $this->resource_key,
+            'id' => $this->id,
+            'project_id' => $this->project_id,
+            'document_key' => $this->document_key,
             'name' => $this->name,
+            'kind' => $this->kind,
             'schema' => $this->schema,
             'value' => $this->value,
-            'media_refs' => $this->media_refs,
+            'metadata' => $this->metadata,
+            'version' => $this->version,
+            'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }

@@ -11,19 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cms_resources', function (Blueprint $table) {
+        Schema::create('structured_documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('site_id', 100)->index();
-            $table->string('type', 32);
-            $table->string('resource_key', 100);
+            $table->string('project_id', 100);
+            $table->string('document_key', 100);
             $table->string('name');
+            $table->string('kind', 50)->default('generic');
             $table->json('schema');
             $table->json('value');
-            $table->json('media_refs');
+            $table->json('metadata')->nullable();
+            $table->unsignedInteger('version')->default(1);
             $table->timestamps();
 
-            $table->unique(['site_id', 'type', 'resource_key']);
-            $table->index(['site_id', 'type']);
+            $table->unique(['project_id', 'document_key']);
+            $table->index(['project_id', 'kind']);
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cms_resources');
+        Schema::dropIfExists('structured_documents');
     }
 };

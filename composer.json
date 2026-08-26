@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "yutoseta/magic-html-content-service",
+    "name": "yutoseta/magic-html-structured-data-service",
     "type": "project",
-    "description": "Contract-first content and immutable snapshot service for Magic HTML static sites.",
-    "keywords": ["laravel", "content", "static-site"],
+    "description": "Private typed authoring document service for Magic HTML projects.",
+    "keywords": ["laravel", "structured-data", "authoring"],
     "license": "MIT",
     "require": {
         "php": "^8.3",

@@ -2,34 +2,38 @@
 
 namespace App\Models;
 
-use Database\Factories\SnapshotFactory;
+use Database\Factories\StructuredDocumentFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-final class Snapshot extends Model
+final class StructuredDocument extends Model
 {
-    /** @use HasFactory<SnapshotFactory> */
+    /** @use HasFactory<StructuredDocumentFactory> */
     use HasFactory;
 
     use HasUuids;
 
     /** @var list<string> */
     protected $fillable = [
-        'site_id',
-        'sequence',
+        'project_id',
+        'document_key',
+        'name',
+        'kind',
+        'schema',
+        'value',
+        'metadata',
         'version',
-        'digest',
-        'document',
-        'published_at',
     ];
 
     /** @return array<string,string> */
     protected function casts(): array
     {
         return [
-            'document' => 'array',
-            'published_at' => 'immutable_datetime',
+            'schema' => 'array',
+            'value' => 'json',
+            'metadata' => 'array',
+            'version' => 'integer',
         ];
     }
 }
